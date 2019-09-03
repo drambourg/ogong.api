@@ -20,10 +20,12 @@ class User
      */
     public $id;
 
+
     /**
-     * @MongoDB\Field(type="integer")
+     * @MongoDB\ReferenceOne(targetDocument=Role::class, inversedBy="users", storeAs="id")
      */
-    public $role;
+    protected $role;
+
 
     /**
      * @MongoDB\Field(type="string")
@@ -56,15 +58,37 @@ class User
     protected $photo;
 
     /**
-     * @MongoDB\Field(type="datetime")
+     * @MongoDB\Field(type="timestamp")
      */
     protected $createdAt;
 
+
+    public function __construct()
+    {
+        $this->createdAt = time();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+    /**
+     * @param mixed $role
+     */
+    public function setRole($role): void
+    {
+        $this->role = $role;
+    }
+
+
 
     /**
      * @return mixed
@@ -169,15 +193,6 @@ class User
     {
         return $this->createdAt;
     }
-
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
 
 
 }
