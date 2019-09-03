@@ -26,6 +26,11 @@ class User
      */
     protected $role;
 
+    /**
+     * @MongoDB\ReferenceOne(targetDocument=Company::class, inversedBy="users", storeAs="id")
+     */
+    protected $company;
+
 
     /**
      * @MongoDB\Field(type="string")
@@ -193,6 +198,24 @@ class User
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param mixed $company
+     */
+    public function setCompany($company): void
+    {
+        $this->company = $company;
+    }
+
+
 
 
 }
