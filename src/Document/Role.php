@@ -25,6 +25,11 @@ class Role
      */
     protected $name;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=User::class, mappedBy="role", storeAs="id")
+     */
+    protected $users;
+
 
     public function getId(): ?int
     {
@@ -42,5 +47,20 @@ class Role
 
         return $this;
     }
+
+
+    public function getUsers()
+    {
+        return $this->users;
+    }
+    public function setUsers($users): void
+    {
+        $this->users = $users;
+    }
+    public function addUser(User $user): void
+    {
+        $user->setRole($this);
+    }
+
 
 }
