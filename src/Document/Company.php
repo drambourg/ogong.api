@@ -20,7 +20,6 @@ class Company
      */
     public $id;
 
-
     /**
      * @MongoDB\ReferenceMany(targetDocument=User::class, mappedBy="company", storeAs="id")
      */
@@ -31,25 +30,20 @@ class Company
      */
     protected $events;
 
-
-
     /**
      * @MongoDB\Field(type="string")
      */
     protected $name;
 
-//    /**
-//     * @MongoDB\ReferenceOne(targetDocument=User::class, storeAs="id")
-//     */
-//    protected $owner;
+    /**
+     * @MongoDB\ReferenceOne(targetDocument=User::class, storeAs="id")
+     */
+    protected $owner;
 
     /**
      * @MongoDB\Field(type="string")
      */
     protected $address;
-
-
-
 
     /**
      * @MongoDB\Field(type="string")
@@ -72,9 +66,6 @@ class Company
         return $this->id;
     }
 
-
-
-
     /**
      * @return mixed
      */
@@ -90,8 +81,6 @@ class Company
     {
         $this->name = $name;
     }
-
-
 
     /**
      * @return mixed
@@ -109,27 +98,21 @@ class Company
         $this->address = $address;
     }
 
-//    /**
-//     * @return mixed
-//     */
-//    public function getOwner()
-//    {
-//        return $this->owner;
-//    }
-//
-//    /**
-//     * @param mixed $owner
-//     */
-//    public function setOwner($owner): void
-//    {
-//        $this->owner = $owner;
-//    }
+    /**
+     * @return mixed
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
 
-
-
-
-
-
+    /**
+     * @param mixed $owner
+     */
+    public function setOwner($owner): void
+    {
+        $this->owner = $owner;
+    }
 
     /**
      * @return mixed
@@ -180,6 +163,5 @@ class Company
     {
         $event->setCompany($this);
     }
-
 
 }
