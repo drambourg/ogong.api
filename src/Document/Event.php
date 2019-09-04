@@ -31,6 +31,11 @@ class Event
     protected $format;
 
     /**
+     * @MongoDB\ReferenceOne(targetDocument=EventStatus::class, inversedBy="events", storeAs="id")
+     */
+    protected $status;
+
+    /**
      * @MongoDB\ReferenceOne(targetDocument=Company::class, inversedBy="events", storeAs="id")
      */
     protected $company;
@@ -183,6 +188,22 @@ class Event
     public function setFormat($format): void
     {
         $this->format = $format;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status): void
+    {
+        $this->status = $status;
     }
 
     /**
