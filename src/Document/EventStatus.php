@@ -12,7 +12,7 @@ use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
  * @ApiResource()
  */
 
-class EventFormat
+class EventStatus
 {
 
     /**
@@ -26,7 +26,7 @@ class EventFormat
     protected $name;
 
     /**
-     * @MongoDB\ReferenceMany(targetDocument=Event::class, mappedBy="format", storeAs="id")
+     * @MongoDB\ReferenceMany(targetDocument=Event::class, mappedBy="status", storeAs="id")
      */
     protected $events;
 
@@ -58,7 +58,7 @@ class EventFormat
     }
     public function addEvent(Event $event): void
     {
-        $event->setFormat($this);
+        $event->setStatus($this);
     }
 
 
