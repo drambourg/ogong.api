@@ -142,6 +142,11 @@ class Event
     protected $participantsAttended;
 
     /**
+     * @MongoDB\ReferenceMany(targetDocument=Participant::class, mappedBy="event", storeAs="id")
+     */
+    protected $participants;
+
+    /**
      * @MongoDB\Field(type="timestamp")
      */
     protected $createdAt;
@@ -551,7 +556,18 @@ class Event
     }
 
 
-
+    public function getParticipants()
+    {
+        return $this->participants;
+    }
+    public function setParticipants($participants): void
+    {
+        $this->participants = $participants;
+    }
+    public function addParticipant(Participant $participant): void
+    {
+        $participant->setEvent($this);
+    }
 
 
 
