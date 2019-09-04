@@ -24,9 +24,9 @@ class EventFormat
      * @MongoDB\Field(type="string")
      */
     protected $name;
-/*
+
     /**
-     * @MongoDB\ReferenceMany(targetDocument=Event::class, mappedBy="event_type", storeAs="id")
+     * @MongoDB\ReferenceMany(targetDocument=Event::class, mappedBy="format", storeAs="id")
      */
     protected $events;
 
@@ -47,7 +47,7 @@ class EventFormat
         return $this;
     }
 
-/*
+
     public function getEvents()
     {
         return $this->events;
@@ -56,10 +56,10 @@ class EventFormat
     {
         $this->events = $events;
     }
-    public function addUser(Event $event): void
+    public function addEvent(Event $event): void
     {
-        $event->setRole($this);
+        $event->setFormat($this);
     }
-*/
+
 
 }

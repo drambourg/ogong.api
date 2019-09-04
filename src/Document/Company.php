@@ -26,6 +26,11 @@ class Company
      */
     protected $users;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=Event::class, mappedBy="company", storeAs="id")
+     */
+    protected $events;
+
 
 
     /**
@@ -161,6 +166,19 @@ class Company
     public function addUser(User $user): void
     {
         $user->setCompany($this);
+    }
+
+    public function getEvents()
+    {
+        return $this->events;
+    }
+    public function setEvents($events): void
+    {
+        $this->events = $events;
+    }
+    public function addEvent(Event $event): void
+    {
+        $event->setCompany($this);
     }
 
 
