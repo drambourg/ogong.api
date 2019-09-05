@@ -23,7 +23,6 @@ class EventRound
      */
     public $id;
 
-
     /**
      * @MongoDB\Field(type="integer")
      */
@@ -33,6 +32,11 @@ class EventRound
      * @MongoDB\ReferenceOne(targetDocument=Event::class, inversedBy="EventRound", storeAs="id")
      */
     protected $event;
+
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=EventRoundTable::class, mappedBy="eventRound", storeAs="id")
+     */
+    protected $eventRoundTables;
 
 
     public function getId(): ?int
@@ -73,4 +77,17 @@ class EventRound
     }
 
 
+
+    public function getEventRoundTables()
+    {
+        return $this->eventRoundTables;
+    }
+    public function setEventRoundTables($eventRoundTables): void
+    {
+        $this->eventRoundTables = $eventRoundTables;
+    }
+    public function addEventRoundTable(EventRoundTable $eventRoundTable): void
+    {
+        $eventRoundTable->setEventRound($this);
+    }
 }
