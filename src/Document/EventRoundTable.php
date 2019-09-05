@@ -34,6 +34,11 @@ class EventRoundTable
      */
     protected $eventRound;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=TableParticipant::class, mappedBy="eventRoundTable", storeAs="id")
+     */
+    protected $tableParticipants;
+
 
     public function getId(): ?int
     {
@@ -72,5 +77,18 @@ class EventRoundTable
         $this->eventRound = $eventRound;
     }
 
+
+    public function getTableParticipants()
+    {
+        return $this->tableParticipants;
+    }
+    public function setTableParticipants($tableParticipants): void
+    {
+        $this->tableParticipants = $tableParticipants;
+    }
+    public function addTableParticipant(TableParticipant $tableParticipant): void
+    {
+        $tableParticipant->setEventRoundTable($this);
+    }
 
 }
