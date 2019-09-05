@@ -147,6 +147,11 @@ class Event
     protected $participants;
 
     /**
+     * @MongoDB\ReferenceMany(targetDocument=EventRound::class, mappedBy="event", storeAs="id")
+     */
+    protected $eventRounds;
+
+    /**
      * @MongoDB\Field(type="timestamp")
      */
     protected $createdAt;
@@ -568,6 +573,23 @@ class Event
     {
         $participant->setEvent($this);
     }
+
+
+    public function getEventRounds()
+    {
+        return $this->eventRounds;
+    }
+
+    public function setEventRounds($eventRounds): void
+    {
+        $this->eventRounds = $eventRounds;
+    }
+
+    public function addEventRound(EventRound $eventRound): void
+    {
+        $eventRound->setEvent($this);
+    }
+
 
 
 

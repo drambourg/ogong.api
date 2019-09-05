@@ -66,6 +66,13 @@ class Participant
      */
     protected $createdAt;
 
+    /**
+     * @MongoDB\ReferenceMany(targetDocument=TableParticipant::class, mappedBy="participant", storeAs="id")
+     */
+    protected $tables;
+
+
+
 
     public function __construct()
     {
@@ -217,6 +224,19 @@ class Participant
     }
 
 
+
+    public function getTables()
+    {
+        return $this->tables;
+    }
+    public function setTables($tables): void
+    {
+        $this->tables = $tables;
+    }
+    public function addTable(TableParticipant $tableParticipant): void
+    {
+        $tableParticipant->setParticipant($this);
+    }
 
 
 
