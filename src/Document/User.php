@@ -5,21 +5,20 @@ namespace App\Document;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 
 /**
  * @MongoDB\Document
  * @ApiResource()
  */
-
-class User
+class User implements UserInterface
 {
 
     /**
      * @MongoDB\Id(strategy="INCREMENT", type="integer")
      */
     public $id;
-
 
     /**
      * @MongoDB\ReferenceOne(targetDocument=Role::class, inversedBy="users", storeAs="id")
@@ -30,7 +29,6 @@ class User
      * @MongoDB\ReferenceOne(targetDocument=Company::class, inversedBy="users", storeAs="id")
      */
     protected $company;
-
 
     /**
      * @MongoDB\Field(type="string")
@@ -67,7 +65,6 @@ class User
      */
     protected $createdAt;
 
-
     public function __construct()
     {
         $this->createdAt = time();
@@ -85,6 +82,7 @@ class User
     {
         return $this->role;
     }
+
     /**
      * @param mixed $role
      */
@@ -92,8 +90,6 @@ class User
     {
         $this->role = $role;
     }
-
-
 
     /**
      * @return mixed
@@ -215,7 +211,37 @@ class User
         $this->company = $company;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getRoles()
+    {
+        return array($this->role->getName());
+    }
 
+    /**
+     * Returns the salt that was originally used to encode the password.
+     * This can return null if the password was not encoded using a salt.
+     */
+    public function getSalt()
+    {
+    }
 
+    /**
+     * Returns the username used to authenticate the user.
+     * @return string The username
+     */
+    public function getUsername(): string
+    {
+        return (string)$this->email;
+    }
 
+    /**
+     * Removes sensitive data from the user.
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+    }
 }
