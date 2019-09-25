@@ -16,6 +16,7 @@ class Company
 {
 
     /**
+     * @ApiProperty(identifier=true)
      * @MongoDB\Id(strategy="INCREMENT", type="integer")
      */
     public $id;
