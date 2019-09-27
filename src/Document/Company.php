@@ -3,6 +3,7 @@
 
 namespace App\Document;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
@@ -16,6 +17,7 @@ class Company
 {
 
     /**
+     * @ApiProperty(identifier=true)
      * @MongoDB\Id(strategy="INCREMENT", type="integer")
      */
     public $id;
