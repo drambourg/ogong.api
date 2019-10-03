@@ -3,6 +3,7 @@
 
 namespace App\Document;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -12,10 +13,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @MongoDB\Document
  * @ApiResource()
  */
+
 class User implements UserInterface
 {
 
     /**
+     * @ApiProperty(identifier=true)
      * @MongoDB\Id(strategy="INCREMENT", type="integer")
      */
     public $id;
