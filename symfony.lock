@@ -70,23 +70,6 @@
     "doctrine/lexer": {
         "version": "1.1.0"
     },
-    "doctrine/mongodb-odm": {
-        "version": "2.0.0-rc1"
-    },
-    "doctrine/mongodb-odm-bundle": {
-        "version": "3.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.3",
-            "ref": "1fd8598bf42227a1c8905edd32f640e4c5d15eff"
-        },
-        "files": [
-            "config/packages/doctrine_mongodb.yaml",
-            "config/packages/prod/doctrine_mongodb.yaml",
-            "src/Document/.gitignore"
-        ]
-    },
     "doctrine/orm": {
         "version": "v2.6.3"
     },
@@ -117,9 +100,6 @@
             "config/packages/lexik_jwt_authentication.yaml"
         ]
     },
-    "mongodb/mongodb": {
-        "version": "1.4.3"
-    },
     "namshi/jose": {
         "version": "7.2.3"
     },
@@ -133,26 +113,6 @@
         },
         "files": [
             "config/packages/nelmio_cors.yaml"
-        ]
-    },
-    "ocramius/package-versions": {
-        "version": "1.5.1"
-    },
-    "ocramius/proxy-manager": {
-        "version": "2.2.3"
-    },
-    "overblog/graphql-bundle": {
-        "version": "0.12",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "0.12",
-            "ref": "c01dcfb85a6e93f1a43ef36151fcff11cf17f791"
-        },
-        "files": [
-            "config/graphql/types/.gitignore",
-            "config/packages/graphql.yaml",
-            "config/routes/graphql.yaml"
         ]
     },
     "phpdocumentor/reflection-common": {
@@ -271,9 +231,6 @@
     "symfony/mime": {
         "version": "v4.3.4"
     },
-    "symfony/options-resolver": {
-        "version": "v4.3.4"
-    },
     "symfony/polyfill-intl-idn": {
         "version": "v1.12.0"
     },
@@ -373,9 +330,6 @@
             "config/packages/validator.yaml"
         ]
     },
-    "symfony/var-dumper": {
-        "version": "v4.3.4"
-    },
     "symfony/var-exporter": {
         "version": "v4.3.4"
     },
@@ -400,16 +354,7 @@
     "webmozart/assert": {
         "version": "1.5.0"
     },
-    "webonyx/graphql-php": {
-        "version": "v0.13.8"
-    },
     "willdurand/negotiation": {
         "version": "v2.3.1"
-    },
-    "zendframework/zend-code": {
-        "version": "3.3.1"
-    },
-    "zendframework/zend-eventmanager": {
-        "version": "3.2.1"
     }
 }
