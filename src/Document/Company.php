@@ -6,16 +6,20 @@ namespace App\Document;
 use ApiPlatform\Core\Annotation\ApiProperty;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\Bundle\MongoDBBundle\Validator\Constraints\Unique;
 
 
 /**
  * @MongoDB\Document
  * @ApiResource()
+ * @Unique(
+ *     fields={"name", "address"},
+ *     errorPath="address",
+ *     message="Cette adresse existe déjà pour cette société."
+ * )
  */
-
 class Company
 {
-
     /**
      * @ApiProperty(identifier=true)
      * @MongoDB\Id(strategy="INCREMENT", type="integer")
@@ -144,10 +148,12 @@ class Company
     {
         return $this->users;
     }
+
     public function setUsers($users): void
     {
         $this->users = $users;
     }
+
     public function addUser(User $user): void
     {
         $user->setCompany($this);
@@ -157,10 +163,12 @@ class Company
     {
         return $this->events;
     }
+
     public function setEvents($events): void
     {
         $this->events = $events;
     }
+
     public function addEvent(Event $event): void
     {
         $event->setCompany($this);
