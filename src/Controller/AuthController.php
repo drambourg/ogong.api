@@ -5,29 +5,27 @@ namespace App\Controller;
 
 
 use ApiPlatform\Core\Validator\ValidatorInterface;
-use App\Document\Company;
-use App\Document\Role;
-use App\Document\User;
-use Doctrine\ODM\MongoDB\DocumentManager;
+use App\Entity\Company;
+use App\Entity\User;
+use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Doctrine\ODM\MongoDB\MongoDBException;
 
 class AuthController
 {
     /**
      * @param Request $request
      * @param UserPasswordEncoderInterface $encoder
-     * @param DocumentManager $dm
+     * @param ObjectManager $em
      * @param ValidatorInterface $validator
      * @return JsonResponse
-     * @throws MongoDBException
+     * @throws \Exception
      */
     public function register(
         Request $request,
         UserPasswordEncoderInterface $encoder,
-        DocumentManager $dm,
+        ObjectManager $em,
         ValidatorInterface $validator
     ): JsonResponse
     {
@@ -41,10 +39,10 @@ class AuthController
         $user->setFirstname($data->firstname);
         $user->setlastname($data->lastname);
         $user->setPassword($encoder->encodePassword($user, $data->password));
-        $role = $dm->getRepository(Role::class)->find($data->role);
-        $user->setRole($role);
-        $company = $dm->getRepository(Company::class)->find($data->company);
+        $user->setRoles($data->roles);
+        $company = $em->getRepository(Company::class)->find($data->company);
         $user->setCompany($company);
+        $user->setCreatedAt(new \DateTime());
 
         $errors = $validator->validate($user);
 
@@ -52,8 +50,8 @@ class AuthController
             return new JsonResponse($errors, 400);
         }
 
-        $dm->persist($user);
-        $dm->flush();
+        $em->persist($user);
+        $em->flush();
 
         return new JsonResponse($data, 201);
     }
