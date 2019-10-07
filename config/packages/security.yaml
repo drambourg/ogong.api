@@ -1,12 +1,14 @@
 security:
   encoders:
-    App\Document\User:
+    App\Entity\User:
       algorithm: bcrypt
 
   providers:
     #    in_memory: { memory: null }
     app_user_provider:
-      mongodb: { class: App:User, property: email }
+      entity:
+        class: App\Entity\User
+        property: email
 
   firewalls:
     dev:
