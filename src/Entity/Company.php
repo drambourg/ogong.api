@@ -6,10 +6,17 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
+ * @UniqueEntity(
+ *     fields={"name", "address"},
+ *     errorPath="address",
+ *     message="Cette adresse est déjà utilisée pour cette entreprise."
+ * )
  */
 class Company
 {
@@ -21,7 +28,7 @@ class Company
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="company", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="company")
      */
     private $users;
 
@@ -32,22 +39,45 @@ class Company
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
+     *
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "2 caractères minimum."
+     * )
      */
     private $name;
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\User", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
      */
     private $owner;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
+     *
+     * @Assert\Length(
+     *      min = 2,
+     *      max = 255,
+     *      minMessage = "2 caractères minimum."
+     * )
      */
     private $address;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
      */
     private $logo;
 
