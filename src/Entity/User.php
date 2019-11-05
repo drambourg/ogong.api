@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
@@ -26,32 +27,47 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="users")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
     private $company;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
      */
     private $firstName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
      */
     private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255)
-     */
-    private $address;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
+     *
+     * @Assert\Email(
+     *     message = "Adresse email non valide.",
+     * )
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
      */
     private $password;
 
@@ -64,6 +80,25 @@ class User implements UserInterface
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @Assert\NotBlank(
+     *     message="Champ obligatoire."
+     * )
+     *
+     * @Assert\Length(
+     * max=10,
+     * maxMessage = "Numéro non valide."
+     * )
+     *
+     * @Assert\Regex(
+     *     "/0[6-7][0-9]{8}/",
+     *     message="Numéro non valide."
+     * )
+     */
+    private $telephone;
 
     public function getId(): ?int
     {
@@ -107,7 +142,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -151,18 +186,6 @@ class User implements UserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -211,6 +234,18 @@ class User implements UserInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getTelephone(): ?string
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string $telephone): self
+    {
+        $this->telephone = $telephone;
 
         return $this;
     }
