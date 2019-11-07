@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ApiResource()
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -21,9 +21,9 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json_array")
      */
-    private $role;
+    private $roles;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="users")
@@ -108,22 +108,22 @@ class User
     /**
      * @return mixed
      */
-    public function getRole()
+    public function getRoles()
     {
-        $role = $this->role;
+        $roles = $this->roles;
         // Guarantee every user at least has ROLE_USER
-        $role || $role='ROLE_USER';
+        $roles[] = 'ROLE_USER';
 
-        return $role;
+        return array_unique($roles);
     }
 
     /**
-     * @param string $role
+     * @param array $roles
      * @return User
      */
-    public function setRole(string $role): self
+    public function setRoles(array $roles): self
     {
-        $this->role = $role;
+        $this->roles = $roles;
 
         return $this;
     }
