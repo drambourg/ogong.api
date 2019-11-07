@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "^1.7",
         "api-platform/api-pack": "^1.2",
+        "fzaninotto/faker": "^1.8",
         "lexik/jwt-authentication-bundle": "^2.6",
         "nelmio/cors-bundle": "^1.5",
         "symfony/console": "4.3.*",
@@ -18,6 +19,8 @@
         "symfony/yaml": "4.3.*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.2",
+        "ottaviano/faker-gravatar": "^0.1.2",
         "symfony/maker-bundle": "^1.13"
     },
     "config": {
