@@ -38,7 +38,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             'lastName' => 'SuperAdmin',
             'email' => 'superadmin@projet.io',
             'telephone' => '0606060606',
-            'roles' => ['ROLE_USER']
+            'roles' => ['ROLE_SUPERADMIN']
         ],
     ];
 
