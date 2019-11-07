@@ -69,7 +69,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
         }
 
         //Extra Users
-        $countUser = 36;
+        $countUser = 10;
         for ($nUser = 0; $nUser < $countUser; $nUser++) {
             $user = new User();
             $user->setFirstName($faker->firstName);
