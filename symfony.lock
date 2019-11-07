@@ -158,6 +158,9 @@
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
+    "ottaviano/faker-gravatar": {
+        "version": "0.1.2"
+    },
     "phpdocumentor/reflection-common": {
         "version": "1.0.1"
     },
