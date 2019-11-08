@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
+ * @ApiResource(attributes={"order"={"name": "ASC", "address": "ASC" }})
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  * @UniqueEntity(
  *     fields={"name", "address"},
