@@ -77,15 +77,15 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setEmail($faker->email);
             $user->setTelephone($faker->phoneNumber);
             $faker->boolean(70) ? $user->setPhoto($faker->gravatarUrl()) : null;
-            $user->setRoles([self::ROLES[$faker->numberBetween(0, count(self::ROLES) - 1)]]);
+            $user->setRoles([self::ROLES[$faker->numberBetween(0, count(self::ROLES) - 2)]]);
             $user->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($user, $passwordDefault);
             $user->setPassword($password);
-            $faker->boolean(70) ? $user->setCompany(
+            $user->setCompany(
                 $this->getReference(
                     'company' . $faker->numberBetween(0, CompanyFixtures::COUNT_COMPANY - 1)
                 )
-            ) : null;
+            );
             $manager->persist($user);
         }
         $manager->flush();

@@ -19,7 +19,7 @@ class CompanyFixtures extends Fixture
             $company->setName($faker->company);
             $company->setAddress($faker->address);
             $company->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
-            $company->setLogo($faker->imageUrl(200, 200, 'abstract'));
+            $company->setLogo($faker->imageUrl(200, 200, 'animals'));
             $this->addReference('company' . $nCompany, $company);
             $manager->persist($company);
         }
