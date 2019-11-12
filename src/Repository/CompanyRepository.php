@@ -25,6 +25,11 @@ class CompanyRepository extends ServiceEntityRepository
             ->andWhere('c.name LIKE :value')
             ->orWhere('c.address LIKE :value')
             ->setParameter('value', '%' . $value . '%');
+        if (isset($orderBy)) {
+            foreach ($orderBy as $key => $value) {
+                $qb =$qb->orderBy('c.'.  $key, $value);
+            }
+        }
         $limit && $qb = $qb->setMaxResults($limit);
         return $qb->getQuery()
             ->getResult();
