@@ -5,12 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource()
+ * @ApiResource(attributes={"order"={"name": "ASC", "address": "ASC" }})
  * @ORM\Entity(repositoryClass="App\Repository\CompanyRepository")
  * @UniqueEntity(
  *     fields={"name", "address"},
