@@ -41,8 +41,6 @@ class Company
     private $events;
 
     /**
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
      * @ORM\Column(type="string", length=255)
      *
      * @Assert\NotBlank(
@@ -63,8 +61,6 @@ class Company
     private $owner;
 
     /**
-     * @ApiFilter(SearchFilter::class, strategy="partial")
-     *
      * @ORM\Column(type="string", length=255)
      *
      * @Assert\NotBlank(
