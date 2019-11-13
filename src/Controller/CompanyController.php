@@ -32,10 +32,14 @@ class CompanyController extends AbstractController
         foreach ($queries as $key => $query) {
             $filters[$key] = $query;
         };
+        $orderBy = [];
+        if (isset($filters["sort"])) {
+            $orderBy=[$filters["sort"] => $filters["sorttype"]?? "ASC"];
+        }
         if (isset($filters['value'])) {
-            $companies = $companyRepository->search($filters['value'] ?? '');
+            $companies = $companyRepository->search($filters['value'] ?? '', $orderBy);
         } else {
-            $companies = $companyRepository->findBy([]);
+            $companies = $companyRepository->findBy([], $orderBy);
         }
         $json = $serializer->serialize($companies, 'json');
         return new JsonResponse($json, 200, [], true);
