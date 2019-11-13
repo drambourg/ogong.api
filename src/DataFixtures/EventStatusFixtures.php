@@ -10,27 +10,27 @@ class EventStatusFixtures extends Fixture
 {
     const EVENT_STATUSES = [
         [
-            'id' => '1',
+            'id' => 1,
             'name' => 'En préparation'
         ],
         [
-            'id' => '2',
+            'id' => 2,
             'name' => 'Inscription'
         ],
         [
-            'id' => '3',
+            'id' => 3,
             'name' => 'Complet'
         ],
         [
-            'id' => '4',
+            'id' => 4,
             'name' => 'En cours'
         ],
         [
-            'id' => '5',
+            'id' => 5,
             'name' => 'Terminé'
         ],
         [
-            'id' => '6',
+            'id' => 6,
             'name' => 'Date dépassée'
         ]
     ];
