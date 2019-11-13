@@ -11,15 +11,15 @@ class EventFormatFixtures extends Fixture
 {
     const EVENT_FORMATS = [
         [
-            'id' => '1',
+            'id' => 1,
             'name' => 'Speed meeting'
         ],
         [
-            'id' => '2',
+            'id' => 2,
             'name' => 'Job dating'
         ],
         [
-            'id' => '3',
+            'id' => 3,
             'name' => 'Team meeting'
         ],
     ];
