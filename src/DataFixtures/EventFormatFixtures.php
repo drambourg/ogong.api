@@ -30,7 +30,7 @@ class EventFormatFixtures extends Fixture
         foreach (self::EVENT_FORMATS as $format) {
             $eventFormat = new EventFormat();
             $eventFormat->setName($format['name']);
-            $this->addReference('EventFormat' . $format['id'], $eventFormat);
+            $this->addReference('event_format' . $format['id'], $eventFormat);
             $manager->persist($eventFormat);
         }
         $manager->flush();
