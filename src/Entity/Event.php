@@ -88,7 +88,6 @@ class Event
      */
     private $isActive;
 
-
     /**
      * @ORM\Column(type="datetime")
      */
@@ -99,10 +98,6 @@ class Event
      */
     private $participants;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EventRound", mappedBy="event", orphanRemoval=true)
-     */
-    private $eventRounds;
 
     public function __construct()
     {
@@ -271,30 +266,6 @@ class Event
         return $this;
     }
 
-    public function getParticipantsRegistered(): ?int
-    {
-        return $this->participantsRegistered;
-    }
-
-    public function setParticipantsRegistered(int $participantsRegistered): self
-    {
-        $this->participantsRegistered = $participantsRegistered;
-
-        return $this;
-    }
-
-    public function getParticipantsAttended(): ?int
-    {
-        return $this->participantsAttended;
-    }
-
-    public function setParticipantsAttended(int $participantsAttended): self
-    {
-        $this->participantsAttended = $participantsAttended;
-
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -338,34 +309,5 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|EventRound[]
-     */
-    public function getEventRounds(): Collection
-    {
-        return $this->eventRounds;
-    }
 
-    public function addEventRound(EventRound $eventRound): self
-    {
-        if (!$this->eventRounds->contains($eventRound)) {
-            $this->eventRounds[] = $eventRound;
-            $eventRound->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEventRound(EventRound $eventRound): self
-    {
-        if ($this->eventRounds->contains($eventRound)) {
-            $this->eventRounds->removeElement($eventRound);
-            // set the owning side to null (unless already changed)
-            if ($eventRound->getEvent() === $this) {
-                $eventRound->setEvent(null);
-            }
-        }
-
-        return $this;
-    }
 }

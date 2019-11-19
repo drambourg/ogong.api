@@ -25,32 +25,24 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $event->setStartDateTime($faker->dateTimeThisYear);
             $event->setFileAttachment('file.pdf');
             $event->setIsActive($faker->boolean($chanceOfGettingTrue = 90));
-
-            $faker->optional($weight = 0.9)->randomDigit; // 10% chance of NULL
             $event->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $event->setLogo($faker->imageUrl(200, 200, 'food'));
             $event->setSize($faker->numberBetween(4, 121));
-
-
             $event->setStatus(
                 $this->getReference(
                     'event_status' . $faker->numberBetween(1, count(EventStatusFixtures::EVENT_STATUSES))
                 )
             );
-
             $event->setFormat(
                 $this->getReference(
                     'event_format' . $faker->numberBetween(1, count(EventFormatFixtures::EVENT_FORMATS))
                 )
             );
-
             $event->setCompany(
                 $this->getReference(
-                    'company' . $faker->numberBetween(0, CompanyFixtures::COUNT_COMPANY - 1)
+                    'company' . $faker->numberBetween(1, CompanyFixtures::COUNT_COMPANY - 1)
                 )
             );
-
-
             $this->addReference('event' . $nEvent, $event);
 
             $manager->persist($event);
