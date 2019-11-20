@@ -10,7 +10,7 @@ use Faker;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
-    const COUNT_EVENT = 200;
+    const COUNT_EVENT = 20;
     const TEAM_SIZES = [9,16,25,49,121];
 
     public function load(ObjectManager $manager)
