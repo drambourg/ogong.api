@@ -42,7 +42,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             if ($formatID == 3) {
                 $size = self::TEAM_SIZES[array_rand(self::TEAM_SIZES)];
             } else {
-                $size = array_rand(range(1,20));
+                $size = array_rand(range(1,20))+1;
             }
             $event->setSize($size);
             $event->setCompany(
