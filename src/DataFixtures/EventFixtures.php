@@ -10,7 +10,8 @@ use Faker;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
-    const COUNT_EVENT = 20;
+    const COUNT_EVENT = 200;
+    const TEAM_SIZES = [9,16,25,49,121];
 
     public function load(ObjectManager $manager)
     {
@@ -27,22 +28,29 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $event->setIsActive($faker->boolean($chanceOfGettingTrue = 90));
             $event->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $event->setLogo($faker->imageUrl(200, 200, 'food'));
-            $event->setSize($faker->numberBetween(4, 121));
             $event->setStatus(
                 $this->getReference(
                     'event_status' . $faker->numberBetween(1, count(EventStatusFixtures::EVENT_STATUSES))
                 )
             );
+            $formatID = $faker->numberBetween(1, count(EventFormatFixtures::EVENT_FORMATS));
             $event->setFormat(
                 $this->getReference(
-                    'event_format' . $faker->numberBetween(1, count(EventFormatFixtures::EVENT_FORMATS))
+                    'event_format' . $formatID
                 )
             );
+            if ($formatID == 3) {
+                $size = self::TEAM_SIZES[array_rand(self::TEAM_SIZES)];
+            } else {
+                $size = array_rand(range(1,20));
+            }
+            $event->setSize($size);
             $event->setCompany(
                 $this->getReference(
                     'company' . $faker->numberBetween(1, CompanyFixtures::COUNT_COMPANY - 1)
                 )
             );
+
             $this->addReference('event' . $nEvent, $event);
 
             $manager->persist($event);
