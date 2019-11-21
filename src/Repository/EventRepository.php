@@ -21,13 +21,13 @@ class EventRepository extends ServiceEntityRepository
 
     public function search(string $value, array $orderBy = null, $limit = null)
     {
-        $qb = $this->createQueryBuilder('c')
-            ->andWhere('c.title LIKE :value')
-            ->orWhere('c.address LIKE :value')
+        $qb = $this->createQueryBuilder('e')
+            ->andWhere('e.title LIKE :value')
+            ->orWhere('e.company LIKE :value')
             ->setParameter('value', '%' . $value . '%');
         if (isset($orderBy)) {
             foreach ($orderBy as $key => $value) {
-                $qb =$qb->orderBy('c.'.  $key, $value);
+                $qb =$qb->orderBy('e.'.  $key, $value);
             }
         }
         $limit && $qb = $qb->setMaxResults($limit);

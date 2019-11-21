@@ -37,11 +37,11 @@ class EventController extends AbstractController
             $orderBy=[$filters["sort"] => $filters["sorttype"]?? "ASC"];
         }
         if (isset($filters['value'])) {
-            $companies = $eventRepository->search($filters['value'] ?? '', $orderBy);
+            $events = $eventRepository->search($filters['value'] ?? '', $orderBy);
         } else {
-            $companies = $eventRepository->findBy([], $orderBy);
+            $events = $eventRepository->findBy([], $orderBy);
         }
-        $json = $serializer->serialize($companies, 'json');
+        $json = $serializer->serialize($events, 'json');
         return new JsonResponse($json, 200, [], true);
     }
 }
