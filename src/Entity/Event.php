@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource()
+ * @ApiResource(attributes={"order"={"name": "ASC", "address": "ASC" }})
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  */
 class Event
@@ -76,52 +76,7 @@ class Event
     /**
      * @ORM\Column(type="date")
      */
-    private $date;
-
-    /**
-     * @ORM\Column(type="time")
-     */
-    private $startTime;
-
-    /**
-     * @ORM\Column(type="time")
-     */
-    private $endTime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $speakingTime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $changeTime;
-
-    /**
-     * @ORM\Column(type="time")
-     */
-    private $breakStartTime;
-
-    /**
-     * @ORM\Column(type="time")
-     */
-    private $breakEndTime;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $participantsPerTable;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $numberOfTables;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $numberOfRounds;
+    private $startDateTime;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -134,16 +89,6 @@ class Event
     private $isActive;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $participantsRegistered;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $participantsAttended;
-
-    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -153,10 +98,6 @@ class Event
      */
     private $participants;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\EventRound", mappedBy="event", orphanRemoval=true)
-     */
-    private $eventRounds;
 
     public function __construct()
     {
@@ -289,122 +230,14 @@ class Event
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getStartDateTime(): ?\DateTimeInterface
     {
-        return $this->date;
+        return $this->startDateTime;
     }
 
-    public function setDate(\DateTimeInterface $date): self
+    public function setStartDateTime(\DateTimeInterface $date): self
     {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    public function getStartTime(): ?\DateTimeInterface
-    {
-        return $this->startTime;
-    }
-
-    public function setStartTime(\DateTimeInterface $startTime): self
-    {
-        $this->startTime = $startTime;
-
-        return $this;
-    }
-
-    public function getEndTime(): ?\DateTimeInterface
-    {
-        return $this->endTime;
-    }
-
-    public function setEndTime(\DateTimeInterface $endTime): self
-    {
-        $this->endTime = $endTime;
-
-        return $this;
-    }
-
-    public function getSpeakingTime(): ?int
-    {
-        return $this->speakingTime;
-    }
-
-    public function setSpeakingTime(int $speakingTime): self
-    {
-        $this->speakingTime = $speakingTime;
-
-        return $this;
-    }
-
-    public function getChangeTime(): ?int
-    {
-        return $this->changeTime;
-    }
-
-    public function setChangeTime(int $changeTime): self
-    {
-        $this->changeTime = $changeTime;
-
-        return $this;
-    }
-
-    public function getBreakStartTime(): ?\DateTimeInterface
-    {
-        return $this->breakStartTime;
-    }
-
-    public function setBreakStartTime(\DateTimeInterface $breakStartTime): self
-    {
-        $this->breakStartTime = $breakStartTime;
-
-        return $this;
-    }
-
-    public function getBreakEndTime(): ?\DateTimeInterface
-    {
-        return $this->breakEndTime;
-    }
-
-    public function setBreakEndTime(\DateTimeInterface $breakEndTime): self
-    {
-        $this->breakEndTime = $breakEndTime;
-
-        return $this;
-    }
-
-    public function getParticipantsPerTable(): ?int
-    {
-        return $this->participantsPerTable;
-    }
-
-    public function setParticipantsPerTable(int $participantsPerTable): self
-    {
-        $this->participantsPerTable = $participantsPerTable;
-
-        return $this;
-    }
-
-    public function getNumberOfTables(): ?int
-    {
-        return $this->numberOfTables;
-    }
-
-    public function setNumberOfTables(int $numberOfTables): self
-    {
-        $this->numberOfTables = $numberOfTables;
-
-        return $this;
-    }
-
-    public function getNumberOfRounds(): ?int
-    {
-        return $this->numberOfRounds;
-    }
-
-    public function setNumberOfRounds(int $numberOfRounds): self
-    {
-        $this->numberOfRounds = $numberOfRounds;
+        $this->startDateTime = $date;
 
         return $this;
     }
@@ -429,30 +262,6 @@ class Event
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
-
-        return $this;
-    }
-
-    public function getParticipantsRegistered(): ?int
-    {
-        return $this->participantsRegistered;
-    }
-
-    public function setParticipantsRegistered(int $participantsRegistered): self
-    {
-        $this->participantsRegistered = $participantsRegistered;
-
-        return $this;
-    }
-
-    public function getParticipantsAttended(): ?int
-    {
-        return $this->participantsAttended;
-    }
-
-    public function setParticipantsAttended(int $participantsAttended): self
-    {
-        $this->participantsAttended = $participantsAttended;
 
         return $this;
     }
@@ -500,34 +309,5 @@ class Event
         return $this;
     }
 
-    /**
-     * @return Collection|EventRound[]
-     */
-    public function getEventRounds(): Collection
-    {
-        return $this->eventRounds;
-    }
 
-    public function addEventRound(EventRound $eventRound): self
-    {
-        if (!$this->eventRounds->contains($eventRound)) {
-            $this->eventRounds[] = $eventRound;
-            $eventRound->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEventRound(EventRound $eventRound): self
-    {
-        if ($this->eventRounds->contains($eventRound)) {
-            $this->eventRounds->removeElement($eventRound);
-            // set the owning side to null (unless already changed)
-            if ($eventRound->getEvent() === $this) {
-                $eventRound->setEvent(null);
-            }
-        }
-
-        return $this;
-    }
 }
