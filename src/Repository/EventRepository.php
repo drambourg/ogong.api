@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
+use App\Entity\Company;
 
 /**
  * @method Event|null find($id, $lockMode = null, $lockVersion = null)
@@ -19,32 +21,32 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    // /**
-    //  * @return Event[] Returns an array of Event objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function search(string $value, array $orderBy = null, $limit = null)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('e')
 
-    /*
-    public function findOneBySomeField($value): ?Event
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->leftJoin('e.company', 'c')
+            ->leftJoin('e.format', 'f')
+            ->leftJoin('e.status', 's')
+            ->addSelect('c.name AS company')
+            ->addSelect('e.title')
+            ->addSelect('e.size')
+            ->addSelect('e.startDateTime')
+            ->addSelect('f.name AS format')
+            ->addSelect('s.name AS status')
+            ->andWhere('e.title LIKE :value')
+            ->orWhere('c.name LIKE :value')
+            ->setParameter('value', '%' . $value . '%');
+        // default order by company name
+        $qb =$qb->orderBy('company', 'ASC');
+        if (isset($orderBy)) {
+            foreach ($orderBy as $key => $value) {
+                $qb =$qb->orderBy('e.'.  $key, $value);
+            }
+        }
+        $limit && $qb = $qb->setMaxResults($limit);
+        return $qb->getQuery()
+            ->getResult();
+
     }
-    */
 }

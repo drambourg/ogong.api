@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ApiResource(attributes={"order"={"name": "ASC", "address": "ASC" }})
+ * @ApiResource(attributes={"order"={"title": "ASC", "company": "ASC" }})
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
  */
 class Event
@@ -74,7 +74,7 @@ class Event
     private $address;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $startDateTime;
 
