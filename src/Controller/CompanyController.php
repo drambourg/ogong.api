@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\CompanyType;
 use App\Form\UserType;
 use App\Repository\CompanyRepository;
+use App\Repository\UserRepository;
 use App\Service\FormError;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -49,6 +50,36 @@ class CompanyController extends AbstractController
             $companies = $companyRepository->findBy([], $orderBy);
         }
         $json = $serializer->serialize($companies, 'json');
+        return new JsonResponse($json, 200, [], true);
+    }
+
+    /**
+     * @Route("/search-users/", name="company_search_users", methods={"GET"})
+     * @param UserRepository $userRepository
+     * @param SerializerInterface $serializer
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function searchUsers(UserRepository $userRepository,
+                                SerializerInterface $serializer,
+                                Request $request): JsonResponse
+    {
+
+        $queries = $request->query;
+        $filters = [];
+        foreach ($queries as $key => $query) {
+            $filters[$key] = $query;
+        };
+        $orderBy = [];
+        if (isset($filters["sort"])) {
+            $orderBy = [$filters["sort"] => $filters["sorttype"] ?? "ASC"];
+        }
+        if (isset($filters['value']) || isset($filters['company'])  ) {
+            $users = $userRepository->searchUsersFromCompany($filters['company'], $filters['value'] ?? null, $orderBy);
+        } else {
+            $users = $userRepository->findBy([], $orderBy);
+        }
+        $json = $serializer->serialize($users, 'json');
         return new JsonResponse($json, 200, [], true);
     }
 

@@ -68,8 +68,29 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $manager->persist($userDefault);
         }
 
+        //Owner Users
+        for ($nOwner = 0; $nOwner < CompanyFixtures::COUNT_COMPANY; $nOwner++) {
+            $user = new User();
+            $user->setFirstName($faker->firstName);
+            $user->setLastName($faker->lastName);
+            $user->setEmail($faker->email);
+            $user->setTelephone($faker->phoneNumber);
+            $faker->boolean(70) ? $user->setPhoto($faker->gravatarUrl()) : null;
+            $user->setRoles([self::ROLES[1]]);
+            $user->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
+            $password = $this->encoder->encodePassword($user, $passwordDefault);
+            $user->setPassword($password);
+            $user->setCompany($this->getReference('company' . $nOwner));
+            $manager->persist($user);
+
+            $company = $this->getReference('company' . $nOwner);
+            $company->setOwner($user);
+            $manager->persist($company);
+        }
+        $manager->flush();
+
         //Extra Users
-        $countUser = 10;
+        $countUser = 50;
         for ($nUser = 0; $nUser < $countUser; $nUser++) {
             $user = new User();
             $user->setFirstName($faker->firstName);
@@ -77,7 +98,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setEmail($faker->email);
             $user->setTelephone($faker->phoneNumber);
             $faker->boolean(70) ? $user->setPhoto($faker->gravatarUrl()) : null;
-            $user->setRoles([self::ROLES[$faker->numberBetween(0, count(self::ROLES) - 2)]]);
+            $user->setRoles([self::ROLES[ $faker->numberBetween(0, 1)]]);
             $user->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($user, $passwordDefault);
             $user->setPassword($password);
