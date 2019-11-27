@@ -23,7 +23,6 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $event->setDescription($faker->paragraph($nbSentences = 3, $variableNbSentences = true));
             $event->setEndMessage($faker->paragraph($nbSentences = 1));
             $event->setAddress($faker->address);
-            $event->setStartDateTime($faker->dateTimeBetween($startDate = '-2 years', $endDate = '2 years', $timezone = null ));
             $event->setFileAttachment('file.pdf');
             $event->setIsActive($faker->boolean($chanceOfGettingTrue = 90));
             $event->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
