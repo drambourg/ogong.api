@@ -10,7 +10,7 @@ use Faker;
 
 class EventFixtures extends Fixture implements DependentFixtureInterface
 {
-    const COUNT_EVENT = 20;
+    const COUNT_EVENT = 30;
     const TEAM_SIZES = [9,16,25,49,121];
 
     public function load(ObjectManager $manager)
@@ -23,16 +23,11 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
             $event->setDescription($faker->paragraph($nbSentences = 3, $variableNbSentences = true));
             $event->setEndMessage($faker->paragraph($nbSentences = 1));
             $event->setAddress($faker->address);
-            $event->setStartDateTime($faker->dateTimeThisYear);
             $event->setFileAttachment('file.pdf');
             $event->setIsActive($faker->boolean($chanceOfGettingTrue = 90));
             $event->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $event->setLogo($faker->imageUrl(200, 200, 'food'));
-            $event->setStatus(
-                $this->getReference(
-                    'event_status' . $faker->numberBetween(1, count(EventStatusFixtures::EVENT_STATUSES))
-                )
-            );
+            $isFuture = $faker->boolean($chanceOfGettingTrue = 50);
             $formatID = $faker->numberBetween(1, count(EventFormatFixtures::EVENT_FORMATS));
             $event->setFormat(
                 $this->getReference(
@@ -51,10 +46,69 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
                 )
             );
 
+            if ($isFuture) {
+                $event->setStartDateTime($faker->dateTimeBetween($startDate = 'today', $endDate = '2 years', $timezone = null ));
+                $event->setStatus(
+                    $this->getReference(
+                        'event_status' . $faker->numberBetween(1, count(EventStatusFixtures::EVENT_STATUSES)-3)
+                    )
+                );
+            } else {
+                $event->setStartDateTime($faker->dateTimeBetween($startDate = '-2 years', $endDate = 'today', $timezone = null ));
+                $event->setStatus(
+                    $this->getReference(
+                        'event_status' . $faker->numberBetween(5, count(EventStatusFixtures::EVENT_STATUSES))
+                    )
+                );
+            }
+
             $this->addReference('event' . $nEvent, $event);
 
             $manager->persist($event);
         }
+
+
+        //create one event 'en cours' for today's date
+        $event = new Event();
+        $event->setTitle("Today's Big Test");
+        $event->setRegistrationUrl('www.projet.io');
+        $event->setDescription("A test event to have an event 'en cours'...");
+        $event->setEndMessage('Yay, you made it!');
+        $event->setAddress('123 Olympic Dr. 45000 Orleans');
+        $event->setStartDateTime(new \DateTime());
+        $event->setFileAttachment('file.pdf');
+        $event->setIsActive(true);
+        $event->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
+        $event->setLogo($faker->imageUrl(200, 200, 'food'));
+        $formatID = $faker->numberBetween(1, count(EventFormatFixtures::EVENT_FORMATS));
+        $event->setFormat(
+            $this->getReference(
+                'event_format' . $formatID
+            )
+        );
+        if ($formatID == 3) {
+            $size = self::TEAM_SIZES[array_rand(self::TEAM_SIZES)];
+        } else {
+            $size = array_rand(range(1,20))+1;
+        }
+        $event->setSize($size);
+        $event->setCompany(
+            $this->getReference(
+                'company' . $faker->numberBetween(1, CompanyFixtures::COUNT_COMPANY - 1)
+            )
+        );
+
+
+        $event->setStartDateTime($faker->dateTimeBetween($startDate = 'today', $endDate = 'tomorrow', $timezone = null ));
+        $event->setStatus(
+            $this->getReference('event_status4')
+            );
+
+        $this->addReference('event99', $event);
+
+        $manager->persist($event);
+
+
         $manager->flush();
     }
 
