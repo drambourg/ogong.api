@@ -12,33 +12,27 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 class UserFixtures extends Fixture implements DependentFixtureInterface
 {
-    const ROLES = [
-        'ROLE_USER',
-        'ROLE_ADMIN',
-        'ROLE_SUPERADMIN'
-    ];
-
     const DEFAULT_USERS = [
         [
             'firstName' => 'user',
             'lastName' => 'User',
             'email' => 'user@projet.io',
             'telephone' => '0606060606',
-            'roles' => ['ROLE_USER']
+            'role' => 0
         ],
         [
             'firstName' => 'admin',
             'lastName' => 'Admin',
             'email' => 'admin@projet.io',
             'telephone' => '0606060606',
-            'roles' => ['ROLE_ADMIN']
+            'role' => 1
         ],
         [
             'firstName' => 'superadmin',
             'lastName' => 'SuperAdmin',
             'email' => 'superadmin@projet.io',
             'telephone' => '0606060606',
-            'roles' => ['ROLE_SUPERADMIN']
+            'role' => 2
         ],
     ];
 
@@ -61,36 +55,40 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $userDefault->setLastName(self::DEFAULT_USERS[$nUserDefault]['lastName']);
             $userDefault->setEmail(self::DEFAULT_USERS[$nUserDefault]['email']);
             $userDefault->setTelephone(self::DEFAULT_USERS[$nUserDefault]['telephone']);
-            $userDefault->setRoles(self::DEFAULT_USERS[$nUserDefault]['roles']);
+            $userDefault->addRoles($this->getReference('role' . self::DEFAULT_USERS[$nUserDefault]['role']));
             $userDefault->setCreatedAt($faker->dateTimeThisMonth('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($userDefault, $passwordDefault);
             $userDefault->setPassword($password);
             $manager->persist($userDefault);
         }
-
+        $manager->flush();
         //Owner Users
         for ($nOwner = 0; $nOwner < CompanyFixtures::COUNT_COMPANY; $nOwner++) {
-            $user = new User();
-            $user->setFirstName($faker->firstName);
-            $user->setLastName($faker->lastName);
-            $user->setEmail($faker->email);
-            $user->setTelephone($faker->phoneNumber);
-            $faker->boolean(70) ? $user->setPhoto($faker->gravatarUrl()) : null;
-            $user->setRoles([self::ROLES[1]]);
-            $user->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
-            $password = $this->encoder->encodePassword($user, $passwordDefault);
-            $user->setPassword($password);
-            $user->setCompany($this->getReference('company' . $nOwner));
-            $manager->persist($user);
-
+            $owner = new User();
+            $owner->setFirstName($faker->firstName);
+            $owner->setLastName($faker->lastName);
+            $owner->setEmail($faker->email);
+            $owner->setTelephone($faker->phoneNumber);
+            $faker->boolean(70) ? $owner->setPhoto($faker->gravatarUrl()) : null;
+            for ($nRole = 0; $nRole < count(RoleFixtures::ROLES); $nRole++) {
+                //ROLE_ADMIN must because Owner needs it
+                $nRole === 1 ?
+                    $owner->addRoles($this->getReference('role1'))
+                    :
+                    $faker->boolean(70) ? $owner->addRoles($this->getReference('role' . $nRole)) : null;
+            }
+            $owner->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
+            $password = $this->encoder->encodePassword($owner, $passwordDefault);
+            $owner->setPassword($password);
+            $owner->setCompany($this->getReference('company' . $nOwner));
+            $manager->persist($owner);
             $company = $this->getReference('company' . $nOwner);
-            $company->setOwner($user);
+            $company->setOwner($owner);
             $manager->persist($company);
         }
-        $manager->flush();
 
         //Extra Users
-        $countUser = 50;
+        $countUser = 200;
         for ($nUser = 0; $nUser < $countUser; $nUser++) {
             $user = new User();
             $user->setFirstName($faker->firstName);
@@ -98,7 +96,13 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setEmail($faker->email);
             $user->setTelephone($faker->phoneNumber);
             $faker->boolean(70) ? $user->setPhoto($faker->gravatarUrl()) : null;
-            $user->setRoles([self::ROLES[ $faker->numberBetween(0, 1)]]);
+            //Default ROLE_USER
+            $user->addRoles($this->getReference('role0'));
+            for ($nRole = 1; $nRole < count(RoleFixtures::ROLES); $nRole++) {
+                $faker->boolean(70) ?
+                    $user->addRoles($this->getReference('role' . $nRole))
+                    : null;
+            }
             $user->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($user, $passwordDefault);
             $user->setPassword($password);
@@ -116,6 +120,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     {
         return array(
             CompanyFixtures::class,
+            RoleFixtures::class,
         );
     }
 }

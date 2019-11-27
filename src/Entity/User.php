@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,7 +23,8 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", inversedBy="users")
+     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
     private $roles;
 
@@ -100,6 +103,12 @@ class User implements UserInterface
      */
     private $telephone;
 
+
+    public function __construct()
+    {
+        $this->roles = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -110,20 +119,36 @@ class User implements UserInterface
      */
     public function getRoles()
     {
-        $roles = $this->roles;
-        // Guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        $rolesList = $this->roles;
+        $roles = [];
+        foreach ($rolesList as $role) {
+            $roles[] = $role->getName();
+        }
+        return json_encode(array_unique($roles));
     }
 
     /**
-     * @param array $roles
-     * @return User
+     * @return Collection|Role[]
      */
-    public function setRoles(array $roles): self
+    public function getRolesData()
     {
-        $this->roles = $roles;
+        return $this->roles;
+    }
+
+    public function addRoles(Role $role): self
+    {
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function removeRoles(Role $role): self
+    {
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
+        }
 
         return $this;
     }
