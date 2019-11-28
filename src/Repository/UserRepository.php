@@ -19,32 +19,31 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    // /**
-    //  * @return User[] Returns an array of User objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function searchUsersFromCompany(int $companyId, string $value = null, array $orderBy = null, $limit = null)
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('u')
+            ->innerJoin('u.role', 'r')
+            ->select('u.id as id, 
+                            u.firstName as firstName, 
+                             u.lastName as lastName,
+                             u.photo as photo,
+                             r.description as role_description')
+            ->andWhere('u.company = :company')
+            ->setParameter('company', $companyId);
 
-    /*
-    public function findOneBySomeField($value): ?User
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        if (isset($value) && !empty($value)) {
+            $qb->andWhere('u.firstName LIKE :value OR u.lastName LIKE :value')
+                ->setParameter('value', '%' . $value . '%');
+        }
+        if (isset($orderBy)) {
+            foreach ($orderBy as $key => $value) {
+                $qb = $qb->orderBy($key, $value);
+            }
+        }
+        $limit && $qb = $qb->setMaxResults($limit);
+
+        return $qb->getQuery()
+            ->getResult();
+
     }
-    */
 }
