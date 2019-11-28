@@ -54,13 +54,14 @@ class CompanyController extends AbstractController
     }
 
     /**
-     * @Route("/search-users/", name="company_search_users", methods={"GET"})
+     * @Route("/search-users/company/{id}", name="company_search_users", methods={"GET"})
      * @param UserRepository $userRepository
      * @param SerializerInterface $serializer
      * @param Request $request
      * @return JsonResponse
      */
-    public function searchUsers(UserRepository $userRepository,
+    public function searchUsers(int $id,
+                                UserRepository $userRepository,
                                 SerializerInterface $serializer,
                                 Request $request): JsonResponse
     {
@@ -74,8 +75,8 @@ class CompanyController extends AbstractController
         if (isset($filters["sort"])) {
             $orderBy = [$filters["sort"] => $filters["sorttype"] ?? "ASC"];
         }
-        if (isset($filters['value']) || isset($filters['company'])  ) {
-            $users = $userRepository->searchUsersFromCompany($filters['company'], $filters['value'] ?? null, $orderBy);
+        if (isset($filters['value']) || isset($id)) {
+            $users = $userRepository->searchUsersFromCompany($id, $filters['value'] ?? null, $orderBy);
         } else {
             $users = $userRepository->findBy([], $orderBy);
         }

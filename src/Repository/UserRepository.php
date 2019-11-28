@@ -19,21 +19,29 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function searchUsersFromCompany(int $companyId, string $value =null, array $orderBy = null, $limit = null)
+    public function searchUsersFromCompany(int $companyId, string $value = null, array $orderBy = null, $limit = null)
     {
         $qb = $this->createQueryBuilder('u')
+            ->innerJoin('u.role', 'r')
+            ->select('u.id as id, 
+                            u.firstName as firstName, 
+                             u.lastName as lastName,
+                             u.photo as photo,
+                             r.description as role_description')
             ->andWhere('u.company = :company')
             ->setParameter('company', $companyId);
+
         if (isset($value) && !empty($value)) {
             $qb->andWhere('u.firstName LIKE :value OR u.lastName LIKE :value')
                 ->setParameter('value', '%' . $value . '%');
         }
         if (isset($orderBy)) {
             foreach ($orderBy as $key => $value) {
-                $qb = $qb->orderBy('u.' . $key, $value);
+                $qb = $qb->orderBy($key, $value);
             }
         }
         $limit && $qb = $qb->setMaxResults($limit);
+
         return $qb->getQuery()
             ->getResult();
 

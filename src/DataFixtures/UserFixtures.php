@@ -55,13 +55,13 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $userDefault->setLastName(self::DEFAULT_USERS[$nUserDefault]['lastName']);
             $userDefault->setEmail(self::DEFAULT_USERS[$nUserDefault]['email']);
             $userDefault->setTelephone(self::DEFAULT_USERS[$nUserDefault]['telephone']);
-            $userDefault->addRoles($this->getReference('role' . self::DEFAULT_USERS[$nUserDefault]['role']));
+            $userDefault->setRole($this->getReference('role' . self::DEFAULT_USERS[$nUserDefault]['role']));
             $userDefault->setCreatedAt($faker->dateTimeThisMonth('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($userDefault, $passwordDefault);
             $userDefault->setPassword($password);
             $manager->persist($userDefault);
         }
-        $manager->flush();
+
         //Owner Users
         for ($nOwner = 0; $nOwner < CompanyFixtures::COUNT_COMPANY; $nOwner++) {
             $owner = new User();
@@ -70,13 +70,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $owner->setEmail($faker->email);
             $owner->setTelephone($faker->phoneNumber);
             $faker->boolean(70) ? $owner->setPhoto($faker->gravatarUrl()) : null;
-            for ($nRole = 0; $nRole < count(RoleFixtures::ROLES); $nRole++) {
-                //ROLE_ADMIN must because Owner needs it
-                $nRole === 1 ?
-                    $owner->addRoles($this->getReference('role1'))
-                    :
-                    $faker->boolean(70) ? $owner->addRoles($this->getReference('role' . $nRole)) : null;
-            }
+            $owner->setRole($this->getReference('role1'));
             $owner->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($owner, $passwordDefault);
             $owner->setPassword($password);
@@ -97,12 +91,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             $user->setTelephone($faker->phoneNumber);
             $faker->boolean(70) ? $user->setPhoto($faker->gravatarUrl()) : null;
             //Default ROLE_USER
-            $user->addRoles($this->getReference('role0'));
-            for ($nRole = 1; $nRole < count(RoleFixtures::ROLES); $nRole++) {
-                $faker->boolean(70) ?
-                    $user->addRoles($this->getReference('role' . $nRole))
-                    : null;
-            }
+            $user->setRole($this->getReference('role' . $faker->numberBetween(0, count(RoleFixtures::ROLES) - 2)));
             $user->setCreatedAt($faker->dateTimeThisYear('now', 'Europe/Paris'));
             $password = $this->encoder->encodePassword($user, $passwordDefault);
             $user->setPassword($password);

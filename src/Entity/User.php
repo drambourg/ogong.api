@@ -23,12 +23,6 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Role", inversedBy="users")
-     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
-     */
-    private $roles;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="users")
      * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
@@ -103,6 +97,12 @@ class User implements UserInterface
      */
     private $telephone;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Role", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $role;
+
 
     public function __construct()
     {
@@ -114,44 +114,6 @@ class User implements UserInterface
         return $this->id;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getRoles()
-    {
-        $rolesList = $this->roles;
-        $roles = [];
-        foreach ($rolesList as $role) {
-            $roles[] = $role->getName();
-        }
-        return json_encode(array_unique($roles));
-    }
-
-    /**
-     * @return Collection|Role[]
-     */
-    public function getRolesData()
-    {
-        return $this->roles;
-    }
-
-    public function addRoles(Role $role): self
-    {
-        if (!$this->roles->contains($role)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRoles(Role $role): self
-    {
-        if ($this->roles->contains($role)) {
-            $this->roles->removeElement($role);
-        }
-
-        return $this;
-    }
 
     /**
      * Returns the salt that was originally used to encode the password.
@@ -271,6 +233,28 @@ class User implements UserInterface
     public function setTelephone(string $telephone): self
     {
         $this->telephone = $telephone;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRoles()
+    {
+        $roles=[];
+        $roles[] = $this->role->getName();
+        return array_unique($roles);
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
