@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Form\CompanyType;
 use App\Form\UserType;
 use App\Repository\CompanyRepository;
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use App\Service\FormError;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -90,6 +91,7 @@ class CompanyController extends AbstractController
      * @param Company $company
      * @param User $user
      * @param ObjectManager $em
+     * @param RoleRepository $roleRepository
      * @param FormError $formError
      * @return JsonResponse
      */
@@ -97,6 +99,7 @@ class CompanyController extends AbstractController
                            Company $company,
                            User $user,
                            ObjectManager $em,
+                           RoleRepository $roleRepository,
                            FormError $formError): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -107,6 +110,8 @@ class CompanyController extends AbstractController
         if ($formCompany->isSubmitted() && $formCompany->isValid()
             && $formUser->isSubmitted() && $formUser->isValid()) {
             $company->setOwner($user);
+            $role = $roleRepository->findOneBy(['name' => $data['owner']['role']]);
+            $user->setRole($role);
             $user->setCompany($company);
             $em->persist($company);
             $em->persist($user);
