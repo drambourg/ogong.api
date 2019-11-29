@@ -27,6 +27,7 @@ class UserRepository extends ServiceEntityRepository
                             u.firstName as firstName, 
                              u.lastName as lastName,
                              u.photo as photo,
+                             r.name as role,
                              r.description as role_description')
             ->andWhere('u.company = :company')
             ->setParameter('company', $companyId);
